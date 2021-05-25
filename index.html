@@ -6,20 +6,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>UK Covid Tracker</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.js"></script>
-    <!-- <script src="script.js"></script> -->
+    <link rel="stylesheet" type="text/css" href="style.css" />
   </head>
   <body>
-    <h1>UK Covid Tracker</h1>
-
-    <div style="width: 75%">
+    <header>UK based coronavirus tracker</header>
+    <div id="box">
       <canvas id="covidChart" width="400" height="400"></canvas>
     </div>
   </body>
-
   <script>
     // This sets up whichever array needed from the dataset
     const dates = [];
     const casesDailyData = [];
+    const deathsDailyData = [];
 
     async function fetchData() {
       await fetch("https://api.coronavirus.data.gov.uk/v1/data")
@@ -28,12 +27,14 @@
           res.data.map((item) => {
             dates.push(item.date);
             casesDailyData.push(item.casesDaily);
+            deathsDailyData.push(item.deathsDaily);
           })
         )
         .then(() => {
           var ctx = document.getElementById("covidChart").getContext("2d");
           var covidChart = new Chart(ctx, {
             type: "line",
+
             data: {
               labels: dates,
               datasets: [
